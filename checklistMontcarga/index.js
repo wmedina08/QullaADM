@@ -9,23 +9,36 @@ module.exports = async function (context, req) {
             codigo_montacarga,
             horometro,
             gestion,
+            fecha_registro,
+            observaciones,
+            fluidos,
+            componentes,
+            seguridad
+        } = body;
+
+        const {
             nv_aceite_motor,
             nv_aceite_caja,
             nv_aceite_hidraulico,
             nv_liquido_freno,
             nv_liquido_refrigerante,
-            nv_glp,
+            nv_glp
+        } = fluidos?.[0] || {};
+
+        const {
             mangueras,
             llantas,
             chasis,
             lubricacion,
-            luces,
+            luces
+        } = componentes?.[0] || {};
+
+        const {
             extintor,
             claxon,
-            alarma_retroceso,
-            asiento,
-            fecha_registro
-        } = body;
+            alarma: alarma_retroceso,
+            asiento
+        } = seguridad?.[0] || {};
 
         const connStr = process.env.SQLCONNSTR_SqlConnectionString;
         context.log("Conectando a la base de datos con:", connStr);
@@ -38,7 +51,7 @@ module.exports = async function (context, req) {
                 nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
                 mangueras, llantas, chasis, lubricacion, luces,
                 extintor, claxon, alarma_retroceso, asiento,
-                fecha_registro
+                fecha_registro, observaciones
             )
             VALUES (
                 @codigo_montacarga, @horometro, @gestion,
@@ -46,7 +59,7 @@ module.exports = async function (context, req) {
                 @nv_liquido_freno, @nv_liquido_refrigerante, @nv_glp,
                 @mangueras, @llantas, @chasis, @lubricacion, @luces,
                 @extintor, @claxon, @alarma_retroceso, @asiento,
-                @fecha_registro
+                @fecha_registro, @observaciones
             )
         `;
 
@@ -57,7 +70,7 @@ module.exports = async function (context, req) {
             nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
             mangueras, llantas, chasis, lubricacion, luces,
             extintor, claxon, alarma_retroceso, asiento,
-            fecha_registro
+            fecha_registro, observaciones
         });
 
         await pool.request()
@@ -80,6 +93,7 @@ module.exports = async function (context, req) {
             .input('alarma_retroceso', sql.NVarChar(10), alarma_retroceso)
             .input('asiento', sql.NVarChar(10), asiento)
             .input('fecha_registro', sql.DateTime, new Date(fecha_registro))
+            .input('observaciones', sql.NVarChar(sql.MAX), observaciones)
             .query(query);
 
         context.res = {
