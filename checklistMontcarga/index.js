@@ -63,6 +63,9 @@ module.exports = async function (context, req) {
             )
         `;
 
+        // ✅ Conversión segura de la fecha
+        const fechaParseada = new Date(Date.parse(fecha_registro));
+
         context.log("Ejecutando query de INSERT con los siguientes valores:");
         context.log({
             codigo_montacarga, horometro, gestion,
@@ -70,7 +73,7 @@ module.exports = async function (context, req) {
             nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
             mangueras, llantas, chasis, lubricacion, luces,
             extintor, claxon, alarma_retroceso, asiento,
-            fecha_registro, observaciones
+            fecha_registro: fechaParseada, observaciones
         });
 
         await pool.request()
@@ -92,7 +95,7 @@ module.exports = async function (context, req) {
             .input('claxon', sql.NVarChar(10), claxon)
             .input('alarma_retroceso', sql.NVarChar(10), alarma_retroceso)
             .input('asiento', sql.NVarChar(10), asiento)
-            .input('fecha_registro', sql.DateTime, new Date(fecha_registro))
+            .input('fecha_registro', sql.DateTime, fechaParseada)
             .input('observaciones', sql.NVarChar(sql.MAX), observaciones)
             .query(query);
 
