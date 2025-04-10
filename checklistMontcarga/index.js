@@ -45,7 +45,7 @@ module.exports = async function (context, req) {
         const pool = await sql.connect(connStr);
 
         const query = `
-            INSERT INTO tb_checklist_montagarga (
+            INSERT INTO tb_checklist_montacarga (
                 codigo_montacarga, horometro, gestion,
                 nv_aceite_motor, nv_aceite_caja, nv_aceite_hidraulico,
                 nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
