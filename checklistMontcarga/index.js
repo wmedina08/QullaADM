@@ -11,6 +11,8 @@ module.exports = async function (context, req) {
             gestion,
             fecha_registro,
             observaciones,
+            nombre_ope,
+            apellido_ope,
             fluidos,
             componentes,
             seguridad
@@ -51,7 +53,7 @@ module.exports = async function (context, req) {
                 nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
                 mangueras, llantas, chasis, lubricacion, luces,
                 extintor, claxon, alarma_retroceso, asiento,
-                fecha_registro, observaciones
+                fecha_registro, observaciones, nombre_ope, apellido_ope
             )
             VALUES (
                 @codigo_montacarga, @horometro, @gestion,
@@ -59,11 +61,10 @@ module.exports = async function (context, req) {
                 @nv_liquido_freno, @nv_liquido_refrigerante, @nv_glp,
                 @mangueras, @llantas, @chasis, @lubricacion, @luces,
                 @extintor, @claxon, @alarma_retroceso, @asiento,
-                @fecha_registro, @observaciones
+                @fecha_registro, @observaciones, @nombre_ope, @apellido_ope
             )
         `;
 
-        // ✅ Conversión segura de la fecha
         const fechaParseada = new Date(Date.parse(fecha_registro));
 
         context.log("Ejecutando query de INSERT con los siguientes valores:");
@@ -73,7 +74,8 @@ module.exports = async function (context, req) {
             nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
             mangueras, llantas, chasis, lubricacion, luces,
             extintor, claxon, alarma_retroceso, asiento,
-            fecha_registro: fechaParseada, observaciones
+            fecha_registro: fechaParseada, observaciones,
+            nombre_ope, apellido_ope
         });
 
         await pool.request()
@@ -97,6 +99,8 @@ module.exports = async function (context, req) {
             .input('asiento', sql.NVarChar(10), asiento)
             .input('fecha_registro', sql.DateTime, fechaParseada)
             .input('observaciones', sql.NVarChar(sql.MAX), observaciones)
+            .input('nombre_ope', sql.NVarChar(100), nombre_ope)
+            .input('apellido_ope', sql.NVarChar(100), apellido_ope)
             .query(query);
 
         context.res = {
