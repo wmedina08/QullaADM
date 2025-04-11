@@ -43,14 +43,14 @@ module.exports = async function (context, req) {
             return;
         }
 
-        // Obtener el último ingreso de HOY (en hora local)
+        // Buscar ingreso más reciente del día (sin conversión de zona horaria)
         const ingreso = await pool.request()
             .input("dni", sql.VarChar, dni)
             .query(`
                 SELECT TOP 1 fecha_hora
                 FROM tb_ingresos_personal_almacen
                 WHERE codigo = @dni
-                AND CAST(DATEADD(HOUR, -5, fecha_hora) AS DATE) = CAST(DATEADD(HOUR, -5, GETDATE()) AS DATE)
+                  AND CAST(DATEADD(HOUR, -5, fecha_hora) AS DATE) = CAST(DATEADD(HOUR, -5, GETDATE()) AS DATE)
                 ORDER BY fecha_hora DESC
             `);
 
@@ -58,12 +58,17 @@ module.exports = async function (context, req) {
         let hora_ingreso = null;
 
         if (ingreso.recordset.length > 0) {
-            hora_ingreso = ingreso.recordset[0].fecha_hora;
-            const hora = hora_ingreso.getHours();
-            const minuto = hora_ingreso.getMinutes();
-            const totalMinutos = hora * 60 + minuto;
+            const fechaBruta = ingreso.recordset[0].fecha_hora;
+            const isoStr = fechaBruta.toISOString(); // Ej: 2025-04-10T05:40:52.807Z
 
-            beneficio = totalMinutos >= 300 && totalMinutos <= 345; // 05:00 - 05:45
+            // Formato amigable: 2025-04-10 05:40:52.807
+            hora_ingreso = isoStr.replace("T", " ").replace("Z", "");
+
+            const horas = fechaBruta.getHours();
+            const minutos = fechaBruta.getMinutes();
+            const totalMinutos = horas * 60 + minutos;
+
+            beneficio = totalMinutos >= 300 && totalMinutos <= 345; // 05:00 a 05:45
         }
 
         context.res = {
