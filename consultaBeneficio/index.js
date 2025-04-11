@@ -50,7 +50,7 @@ module.exports = async function (context, req) {
                 SELECT TOP 1 fecha_hora
                 FROM tb_ingresos_personal_almacen
                 WHERE codigo = @dni
-                  AND CAST(fecha_hora AS DATE) = CAST(GETDATE() AS DATE)
+                AND CAST(DATEADD(HOUR, -5, fecha_hora) AS DATE) = CAST(DATEADD(HOUR, -5, GETDATE()) AS DATE)
                 ORDER BY fecha_hora DESC
             `);
 
