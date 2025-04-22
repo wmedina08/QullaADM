@@ -29,10 +29,17 @@ module.exports = async function (context, req) {
 
         const {
             mangueras,
-            llantas,
             chasis,
             lubricacion,
-            luces
+            llantas_delanteras,
+            llantas_posteriores,
+            luces_direc_derecha,
+            luces_direc_izquierda,
+            luces_freno,
+            luces_retro,
+            luces_alter_delanteras,
+            luces_alter_retroceso,
+            freno
         } = componentes?.[0] || {};
 
         const {
@@ -51,7 +58,11 @@ module.exports = async function (context, req) {
                 codigo_montacarga, horometro, gestion,
                 nv_aceite_motor, nv_aceite_caja, nv_aceite_hidraulico,
                 nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
-                mangueras, llantas, chasis, lubricacion, luces,
+                mangueras, chasis, lubricacion,
+                llantas_delanteras, llantas_posteriores,
+                luces_direc_derecha, luces_direc_izquierda, luces_freno,
+                luces_retro, luces_alter_delanteras, luces_alter_retroceso,
+                freno,
                 extintor, claxon, alarma_retroceso, asiento,
                 fecha_registro, observaciones, nombre_ope, apellido_ope
             )
@@ -59,7 +70,11 @@ module.exports = async function (context, req) {
                 @codigo_montacarga, @horometro, @gestion,
                 @nv_aceite_motor, @nv_aceite_caja, @nv_aceite_hidraulico,
                 @nv_liquido_freno, @nv_liquido_refrigerante, @nv_glp,
-                @mangueras, @llantas, @chasis, @lubricacion, @luces,
+                @mangueras, @chasis, @lubricacion,
+                @llantas_delanteras, @llantas_posteriores,
+                @luces_direc_derecha, @luces_direc_izquierda, @luces_freno,
+                @luces_retro, @luces_alter_delanteras, @luces_alter_retroceso,
+                @freno,
                 @extintor, @claxon, @alarma_retroceso, @asiento,
                 @fecha_registro, @observaciones, @nombre_ope, @apellido_ope
             )
@@ -72,7 +87,11 @@ module.exports = async function (context, req) {
             codigo_montacarga, horometro, gestion,
             nv_aceite_motor, nv_aceite_caja, nv_aceite_hidraulico,
             nv_liquido_freno, nv_liquido_refrigerante, nv_glp,
-            mangueras, llantas, chasis, lubricacion, luces,
+            mangueras, chasis, lubricacion,
+            llantas_delanteras, llantas_posteriores,
+            luces_direc_derecha, luces_direc_izquierda, luces_freno,
+            luces_retro, luces_alter_delanteras, luces_alter_retroceso,
+            freno,
             extintor, claxon, alarma_retroceso, asiento,
             fecha_registro: fechaParseada, observaciones,
             nombre_ope, apellido_ope
@@ -89,10 +108,17 @@ module.exports = async function (context, req) {
             .input('nv_liquido_refrigerante', sql.NVarChar(10), nv_liquido_refrigerante)
             .input('nv_glp', sql.NVarChar(10), nv_glp)
             .input('mangueras', sql.NVarChar(10), mangueras)
-            .input('llantas', sql.NVarChar(10), llantas)
             .input('chasis', sql.NVarChar(10), chasis)
             .input('lubricacion', sql.NVarChar(10), lubricacion)
-            .input('luces', sql.NVarChar(10), luces)
+            .input('llantas_delanteras', sql.NVarChar(10), llantas_delanteras)
+            .input('llantas_posteriores', sql.NVarChar(10), llantas_posteriores)
+            .input('luces_direc_derecha', sql.NVarChar(10), luces_direc_derecha)
+            .input('luces_direc_izquierda', sql.NVarChar(10), luces_direc_izquierda)
+            .input('luces_freno', sql.NVarChar(10), luces_freno)
+            .input('luces_retro', sql.NVarChar(10), luces_retro)
+            .input('luces_alter_delanteras', sql.NVarChar(10), luces_alter_delanteras)
+            .input('luces_alter_retroceso', sql.NVarChar(10), luces_alter_retroceso)
+            .input('freno', sql.NVarChar(10), freno)
             .input('extintor', sql.NVarChar(10), extintor)
             .input('claxon', sql.NVarChar(10), claxon)
             .input('alarma_retroceso', sql.NVarChar(10), alarma_retroceso)
