@@ -16,7 +16,7 @@ module.exports = async function (context, req) {
   }
 
   try {
-    const pool = await sql.connect(process.env.SqlConnectionString);
+    const pool = await sql.connect(process.env.SQLCONNSTR_SqlConnectionString);
 
     await pool.request()
       .input('codigo', sql.VarChar, body.codigo)
